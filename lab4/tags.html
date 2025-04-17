@@ -24,6 +24,33 @@
        z-index: 999;
        text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
      }
+     @keyframes float1 {
+       0%   { transform: translate(0, 0) rotate(0deg); }
+       50%  { transform: translate(50px, -30px) rotate(15deg); }
+       100% { transform: translate(0, 0) rotate(0deg); }
+     }
+ 
+     @keyframes float2 {
+       0%   { transform: translate(0, 0) rotate(0deg); }
+       50%  { transform: translate(-40px, 25px) rotate(-20deg); }
+       100% { transform: translate(0, 0) rotate(0deg); }
+     }
+ 
+     @keyframes float3 {
+       0%   { transform: translate(0, 0) rotate(0deg); }
+       50%  { transform: translate(30px, 30px) rotate(20deg); }
+       100% { transform: translate(0, 0) rotate(0deg); }
+     }
+ 
+     @keyframes float4 {
+       0%   { transform: translate(0, 0) rotate(0deg); }
+       50%  { transform: translate(-30px, -30px) rotate(-30deg); }
+       100% { transform: translate(0, 0) rotate(0deg); }
+     }
+     .float1 { animation: float1 3s infinite; }
+     .float2 { animation: float2 5s infinite; }
+     .float3 { animation: float3 7s infinite; }
+     .float4 { animation: float4 9s infinite; }
    </style>
  </head>
  <body>
