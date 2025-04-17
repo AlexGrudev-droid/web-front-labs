@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+ <html lang="ru">
+ <head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Грудев Александр. Прогресс</title>
+     <link rel="stylesheet" href="../main.css">
+     <link rel="shortcut icon" href="../lab3/favicon.ico" type="image/x-icon">
+     <link rel="icon" href="../lab3/favicon-16x16.png">
+     <link rel="icon" href="../lab3/favicon-32x32.png">
+   <style>
+     body {
+         margin: 0;
+         height: 100vh;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         background-color: #f0f0f0;
+         font-family: sans-serif;
+     }
+     .panel {
+         border: 10px solid rgb(17, 236, 200);
+         padding: 100px 230px;
+         text-align: center;
+         background-color: #a1e7f0;
+     }
+     .panel-title {
+         font-weight: bold;
+         font-size: 18px;
+         color: rgb(0, 0, 0);
+         margin-bottom: 20px;
+     }
+     .container {
+         display: flex;
+         flex-direction: column-reverse;
+         align-items: center;
+     }
+     .progress {
+         width: 300px;
+         height: 25px;
+         background: white;
+         border: 1px solid #ccc;
+         margin-bottom: 20px;
+         overflow: hidden;
+     }
+     .fill {
+         height: 100%;
+         width: 0%;
+         background: rgb(219, 216, 37);
+         transition: width 5s linear;
+     }
+     .btn {
+         padding: 10px 20px;
+         font-size: 16px;
+         background: #5edada;
+         color: rgb(0, 0, 0);
+         border: none;
+         cursor: pointer;
+         box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+         transition: box-shadow 0.3s;
+     }
+     .btn:hover {
+         box-shadow: 0px 20px 30px rgb(0, 0, 0);
+     }
+     .btn:active + .progress .fill {
+         width: 100%;
+         box-shadow: none;
+     }
+   </style>
+ </head>
+ <body>
+     <header>
+     </header>
+     <main>
+         <div class="panel">
+             <div class="panel-title">Степень прогресса</div>
+             <div class="container">
+             <button class="btn">Нажмите и удерживайте</button>
+             <div class="progress">
+                 <div class="fill"></div>
+             </div>
+             </div>
+         </div>
+ </main>
+ <footer>
+     &copy; Грудев Александр, ФБИ-32, 2 курс, 2025
+ </footer>   
+ </body>
+ </html>
