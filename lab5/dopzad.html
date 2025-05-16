@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Грудев Александр Евгеньевич. Лабораторная 5</title>
+    <link rel="stylesheet" href="../main.css">
+    <link rel="icon" href="../lab3/favicon-32x32.png">
+    <style>
+        img {
+            width: 800px;
+            height: 500px;
+            margin: 20px auto;
+            transition: 1s;
+        }
+        .info {
+            margin: 20px;
+            color: maroon;
+            font-size: 18px;
+        }
+    </style>
+
+    <script>
+        function applyFilter(event) {
+            let img = document.getElementById('image');
+            let filterName = document.getElementById('filterName');
+            let filterValue = document.getElementById('filterValue');
+
+            // Вычисление положения курсора относительно изображения
+            let rect = img.getBoundingClientRect();
+            let x = event.clientX - rect.left;
+            let width = rect.width;
+            let percent = x / width;
+
+            // Ограничение значения в пределах 0–1 (проценты)
+            if (percent < 0) percent = 0;
+            if (percent > 1) percent = 1;
+
+            // Перевод процента в значение фильтр
+            let value = Math.round(percent * 20); // максимум blur 20px
+
+            let filter = '';
+            let description = '';
+
+            if (event.ctrlKey) {
+                // При зажатом Ctrl: grayscale
+                filter = 'grayscale(' + Math.round(percent * 100) + '%)';
+                description = 'grayscale(' + Math.round(percent * 100) + '%)';
+            } else if (event.altKey) {
+                // При зажатом Alt: hue-rotate
+                filter = 'hue-rotate(' + Math.round(percent * 360) + 'deg)';
+                description = 'hue-rotate(' + Math.round(percent * 360) + 'deg)';
+            } else if (event.shiftKey) {
+                // При зажатом Shift: invert
+                filter = 'invert(' + Math.round(percent * 100) + '%)';
+                description = 'invert(' + Math.round(percent * 100) + '%)';
+            } else {
+                // Без клавиш: blur
+                filter = 'blur(' + value + 'px)';
+                description = 'blur(' + value + 'px)';
+            }
+
+            img.style.filter = filter;
+            filterName.innerText = 'Фильтр:';
+            filterValue.innerText = description;
+        }
+
+        function clearFilter() {
+            let img = document.getElementById('image');
+            img.style.filter = 'none';
+            document.getElementById('filterName').innerText = '';
+            document.getElementById('filterValue').innerText = '';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        НГТУ, ФБ, Лабораторная работа 5
+    </header>
+    <main>
+        <div class="info">
+            При наведении будет работать Фильтр blur.<br>
+            При нажатой клавише Ctr — фильтр grayscale.<br>
+            При нажатой клавише Alt — фильтр hue-rotate</b>.<br>
+            При нажатой клавише Shift — фильтр invert.<br>
+        </div>
+        <img src="sidim.jpg" id="image" onmousemove="applyFilter(event)" onmouseleave="clearFilter()">
+        <div class="info">
+            <span id="filterName"></span> <span id="filterValue"></span>
+        </div>
+    </main>
+    <footer>
+        &copy; Грудев Александр, ФБИ-32, 2 курс, 2025
+    </footer>
+</body>
+</html>
