@@ -40,7 +40,7 @@ function convertCurrency() {
 
     $.get('https://www.cbr-xml-daily.ru/daily_json.js', function(data) {
         const rates = JSON.parse(data);
-        const amdRate = rates.Valute.AMD.Value;
+        const amdRate = rates.Valute.AMD.Value / 100;
 
         let result;
         if (selectedCurrency === 'RUB') {
