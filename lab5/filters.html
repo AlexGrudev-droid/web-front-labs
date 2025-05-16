@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Грудев Александр Евгеньевич. Лабораторная 5</title>
+    <link rel="stylesheet" href="../main.css">
+    <link rel="icon" href="../lab3/favicon-32x32.png">
+    <script>
+           function updateFilters() {
+            let blur = document.getElementById('blur').value;
+            let brightness = document.getElementById('brightness').value;
+            let contrast = document.getElementById('contrast').value;
+            let grayscale = document.getElementById('grayscale').value;
+            let hue = document.getElementById('hue').value;
+            let invert = document.getElementById('invert').value;
+            let saturate = document.getElementById('saturate').value;
+            let sepia = document.getElementById('sepia').value;
+
+            document.getElementById('blurOutput').innerText = blur + 'px';
+            document.getElementById('brightnessOutput').innerText = brightness + '%';
+            document.getElementById('contrastOutput').innerText = contrast + '%';
+            document.getElementById('grayscaleOutput').innerText = grayscale + '%';
+            document.getElementById('hueOutput').innerText = hue + '°';
+            document.getElementById('invertOutput').innerText = invert + '%';
+            document.getElementById('saturateOutput').innerText = saturate + '%';
+            document.getElementById('sepiaOutput').innerText = sepia + '%';
+
+            document.getElementById('photo').style.filter = 
+            'blur(' + blur + 'px) ' + 'brightness(' + brightness + '%) ' + 
+            'contrast(' + contrast + '%) ' + 'grayscale(' + grayscale + '%) ' + 
+            'hue-rotate(' + hue + 'deg) ' + 'invert(' + invert + '%) ' +
+            'saturate(' + saturate + '%) ' + 'sepia(' + sepia + '%)';
+        }
+    </script>
+
+    <style>
+        img {
+            width: 1100px;
+            height: 500px;
+            margin-left: 170px;
+        }
+
+        .filter {
+            font-size: 20px;
+            color: maroon;
+            margin: 10px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        НГТУ, ФБ, Лабораторная работа 5
+    </header>
+
+    <main>
+        <div class="filter">
+            Blur:
+            <input type="range" min="0" max="20" value="0" id="blur" oninput="updateFilters()">
+            <span id="blurOutput"></span>
+        </div>
+        
+        <div class="filter">
+            Brightness:
+            <input type="range" min="0" max="500" value="100" id="brightness" oninput="updateFilters()">
+            <span id="brightnessOutput"></span>
+        </div>
+
+        <div class="filter">
+            Contrast:
+            <input type="range" min="0" max="500" value="100" id="contrast" oninput="updateFilters()">
+            <span id="contrastOutput"></span>
+        </div>
+
+        <div class="filter">
+            Grayscale:
+            <input type="range" min="0" max="100" value="0" id="grayscale" oninput="updateFilters()">
+            <span id="grayscaleOutput"></span>
+        </div>
+
+        <div class="filter">
+            Hue Rotate:
+            <input type="range" min="0" max="360" value="0" id="hue" oninput="updateFilters()">
+            <span id="hueOutput"></span>
+        </div>
+
+        <div class="filter">
+            Invert:
+            <input type="range" min="0" max="100" value="0" id="invert" oninput="updateFilters()">
+            <span id="invertOutput"></span>
+        </div>
+
+        <div class="filter">
+            Saturate:
+            <input type="range" min="0" max="500" value="100" id="saturate" oninput="updateFilters()">
+            <span id="saturateOutput"></span>
+        </div>
+
+        <div class="filter">
+            Sepia:
+            <input type="range" min="0" max="100" value="0" id="sepia" oninput="updateFilters()">
+            <span id="sepiaOutput"></span>
+        </div>
+        <div><img src = "sidim.jpg" id='photo'></div>
+    </main>
+    <footer>
+        &copy; Грудев Александр, ФБИ-32, 2 курс, 2025
+    </footer>
+</body>
+</html>
