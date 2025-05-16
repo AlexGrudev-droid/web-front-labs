@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Грудев Александр Евгеньевич. Лабораторная 5</title>
+    <link rel="stylesheet" href="../main.css">
+    <link rel="icon" href="../lab3/favicon-32x32.png">
+    <script>
+        function calculateTotal() {
+        const applePrice = 100;
+        const pearPrice = 80;
+        const orangePrice = 150;
+        const melonPrice = 300;
+        const kiwiPrice = 200;
+
+        let apples = Number(document.getElementById('apples').value) || 0;
+        let pears = Number(document.getElementById('pears').value) || 0;
+        let oranges = Number(document.getElementById('oranges').value) || 0;
+        let melons = Number(document.getElementById('melons').value) || 0;
+        let kiwis = Number(document.getElementById('kiwis').value) || 0;
+
+        let total = (apples * applePrice) + (pears * pearPrice) + (oranges * orangePrice) + (melons * melonPrice) + (kiwis * kiwiPrice);
+
+        document.getElementById('totalPrice').textContent = "Общая цена: " + total + " р";
+    }
+
+    function clearCart() {
+        document.getElementById('apples').value = '';
+        document.getElementById('pears').value = '';
+        document.getElementById('oranges').value = '';
+        document.getElementById('melons').value = '';
+        document.getElementById('kiwis').value = '';
+        document.getElementById('totalPrice').textContent = '';
+    }
+    </script>
+
+    <style>
+        body {
+            background-color: #e4fcff2f;
+            font-family: Arial, sans-serif;
+        }
+        .cart {
+            background: #ffffff;
+            padding: 20px;
+            width: 300px;
+            margin: 50px auto;
+            border: 1px solid #000000;
+            border-radius: 5px;
+        }
+        .cart h2 {
+            text-align: center;
+            color: #000000;
+        }
+        .cart input[type="number"] {
+            width: 100%;
+            margin: 5px 0 15px 0;
+            padding: 5px;
+        }
+        .cart button {
+            padding: 5px 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .total {
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        НГТУ, ФБ, Лабораторная работа 4
+    </header>
+    <main>
+        <div class="cart">
+            <h2>Корзина товаров</h2>
+        
+            Яблоки (100р/шт):<br>
+            <input type="number" id="apples" min="0" placeholder="Сколько яблок нужно?"><br>
+        
+            Груши (80р/шт):<br>
+            <input type="number" id="pears" min="0" placeholder="Введите количество груш"><br>
+        
+            Апельсины (150р/шт):<br>
+            <input type="number" id="oranges" min="0" placeholder="Сколько апельсинов?"><br>
+        
+            Дыни (300р/шт):<br>
+            <input type="number" id="melons" min="0" placeholder="Количество дынь"><br>
+        
+            Киви (200р/шт):<br>
+            <input type="number" id="kiwis" min="0" placeholder="Введите количество киви"><br>
+        
+            <button onclick="calculateTotal()">Рассчитать</button>
+            <button onclick="clearCart()">Очистить</button>
+        
+            <div id="totalPrice" class="total"></div>
+        </div>
+    </main>
+    <footer>
+        &copy; Грудев Александр, ФБИ-32, 2 курс, 2025
+    </footer>
+</body>
+</html>
