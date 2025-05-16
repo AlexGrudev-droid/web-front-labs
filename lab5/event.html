@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Грудев Александр Евгеньевич. Лабораторная 5</title>
+    <link rel="stylesheet" href="../main.css">
+    <link rel="icon" href="../lab3/favicon-32x32.png">
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            border: 2px solid gray;
+        }
+    </style>
+    <script>
+        function showCoords() {
+            let x = this.event.x;
+            let y = this.event.y;
+            let div = document.getElementById('block');
+
+            let message = '<b>x</b> = ' + x + 'px<br><b>y</b> = ' + y + 'px';
+
+            div.style.color = 'black';
+            div.style.borderRadius = '0px';
+            div.style.backgroundColor = 'aqua';
+            div.style.borderStyle = 'solid';
+
+            if(this.event.ctrlKey) {
+                div.style.color = 'red';
+                message += '<br><b>Нажата клавиша Ctrl</b>';
+            }
+
+            if(this.event.altKey) {
+                div.style.backgroundColor = 'yellow';
+                div.style.color = 'green';
+                div.style.borderRadius = '10px';
+                message += '<br><b>Нажата клавиша Alt</b>';
+            }
+
+            if(this.event.shiftKey) {
+                div.style.backgroundColor = 'lightgreen';
+                div.style.color = 'navy';
+                div.style.borderRadius = '50px';
+                div.style.borderStyle = 'dashed';
+                message += '<br><b>Нажата клавиша Shift</b>';
+            }
+
+            div.innerHTML = message;
+        }
+    </script>
+    <style>
+        #block {
+            width: 200px;
+            height: 200px;
+            border: solid;
+            background-color: aqua;
+            cursor: crosshair;
+            margin: 20px;
+            text-align: center;
+            font-size: 18px;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        НГТУ, ФБ, Лабораторная работа 5
+    </header>
+    <main>
+        <div id="block" onmousemove="showCoords()"></div>
+    </main>
+    <footer>
+        &copy; Грудев Александр, ФБИ-32, 2 курс, 2025
+    </footer>
+</body>
+</html>
