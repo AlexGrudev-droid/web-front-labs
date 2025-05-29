@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Грудев Александр Евгеньевич. Лабораторная 6</title>
+    <link rel="stylesheet" href="../main.css">
+    <link rel="icon" href="../lab3/favicon-32x32.png">
+    <style>
+        body {
+            text-align: center;
+            background-color: #c3e9f7;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        h1 {
+            color: darkred;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            border: 2px solid green;
+        }
+        td {
+            border: 1px solid green;
+            padding: 8px 16px;
+            color: green;
+            font-size: large;
+            font-style: oblique;
+            font-weight: bold;
+        }
+        .input-group {
+            margin: 15px auto;
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        input[type="number"] {
+            padding: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: white;
+            border: 1px solid #555;
+            cursor: pointer;
+        }
+    </style>
+     <script>
+        function showMultipleTable() {
+            const num = parseInt(document.getElementById("number").value) || 7;
+            const start = parseInt(document.getElementById("start").value) || 1;
+            const end = parseInt(document.getElementById("end").value) || 10;
+
+            const tableDiv = document.getElementById("mtable");
+            tableDiv.innerHTML = "<h1>Таблица умножения</h1>";
+
+            if (start > end) {
+                tableDiv.innerHTML += "<p style='color:red;'>Ошибка: начальное значение больше конечного!</p>";
+                return;
+            }
+            let x = "<table>";
+            for (let i = start; i <= end; i++) {
+                x += `<tr><td>${i} * ${num} = ${i * num}</td></tr>`;
+            }
+            x += "</table>";
+            tableDiv.innerHTML += x;
+        }
+    </script>
+</head>
+<body onload="showMultipleTable()">
+    <header>
+        НГТУ, ФБ, Лабораторная работа 6
+    </header>
+    <main>
+        <div id="mtable"></div>
+        <div class="input-group">
+            <label>Умножить на: <input type="number" id="number" value="7"></label>
+            <label>Начать с: <input type="number" id="start" value="1"></label>
+            <label>Закончить на: <input type="number" id="end" value="10"></label>
+            <button onclick="showMultipleTable()">Таблица</button>
+        </div>
+    </main>
+    <footer>
+        &copy; Грудев Александр, ФБИ-32, 2 курс, 2025
+    </footer>
+</body>
+</html>
