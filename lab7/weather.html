@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Грудев Александр Евгеньевич. Лабораторная 7</title>
+    <link rel="stylesheet" href="../main.css">
+    <link rel="icon" href="../lab3/favicon-32x32.png">
+    <style>
+        #weather-info {
+            margin: 20px;
+            padding: 15px;
+            width: 300px;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+
+    <script>
+        function getWeather() {
+            const url = 'https://api.open-meteo.com/v1/forecast?latitude=55.0415&longitude=82.9346&hourly=temperature_2m&timezone=Asia%2FBangkok';
+            let button = document.getElementById('button');
+            button.remove();
+
+            fetch(url)
+                .then(
+                    function(response) {
+                        return response.json();
+                    }
+                )
+                .then(function(json) {
+                    const timeArray = json.hourly.time;
+                    const tempArray = json.hourly.temperature_2m;
+
+                    const now = new Date();
+                    const today = now.toISOString().split('T')[0];
+
+                    const hoursToShow = ['08:00', '12:00', '20:00'];
+                    const weatherData = [];
+
+                    hoursToShow.forEach(hour => {
+                        const timeToFind = `${today}T${hour}`;
+                        const index = timeArray.indexOf(timeToFind);
+                        if (index !== -1) {
+                        weatherData.push({ time: hour, temp: tempArray[index] });
+                        }
+                    });
+
+                    const infoDiv = document.getElementById('weather-info');
+                    if (weatherData.length > 0) {
+                        infoDiv.innerHTML = `
+                        <h2>Погода в Новосибирске</h2>
+                        <h2>${today.toLocaleString('ru-RU')}</h2>
+                        ${weatherData.map(item => `<p><strong>${item.time}</strong>: ${item.temp}°C</p>`).join('')}
+                        `;
+                    } else {
+                        infoDiv.innerHTML = '<p style="color:red;">Данные на сегодня недоступны</p>';
+                    }
+                })
+        }
+    </script>
+</head>
+<body>
+    <header>
+        НГТУ, ФБ, Лабораторная работа 7
+    </header>
+
+    <main>
+        <button id="button" onclick="getWeather()" style="height: 50px; width: 300px; background-color: aqua; margin: 20px;">
+            Узнать погоду в Новосибирске
+        </button>
+
+        <div id="weather-info"></div>
+    </main>
+    <footer>
+        &copy; Грудев Александр, ФБИ-32, 2 курс, 2025
+    </footer>
+</body>
+</html>
