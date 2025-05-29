@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Грудев Александр Евгеньевич. Лабораторная 7</title>
+    <link rel="stylesheet" href="../main.css">
+    <link rel="icon" href="../lab3/favicon-32x32.png">
+    <style>
+        #stocks-table {
+            margin: 10px;
+            width: 300px;
+            border-collapse: collapse;
+        }
+
+        #stocks-table th, #stocks-table td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #000000;
+        }
+
+        .positive {
+            color: green;
+            font-weight: bold;
+        }
+
+        .negative {
+            color: red;
+            font-weight: bold;
+        }
+
+        #detail {
+            margin: 15px;
+            font-size: 20px;
+            line-height: 1.5;
+        }
+
+    </style>
+    <script src="stocks.js"></script>
+    <script>
+        function showStocks() {
+            let table = document.getElementById('stocks-table');
+            let detail = document.getElementById('detail');
+            let button = document.getElementById('buttonOFF');
+            button.remove();
+
+            let header = document.createElement('tr');
+            let headers = ['Дата', 'Цена, тыс. руб.', 'Разница'];
+            headers.forEach(text => {
+                let th = document.createElement('th');
+                th.innerText = text;
+                header.appendChild(th);
+            });
+            table.appendChild(header);
+
+            for(let i = 0; i < stocks.length; i++) {
+                let tr = document.createElement('tr');
+                
+                let dateTd = document.createElement('td');
+                dateTd.innerText = date[i];
+                tr.appendChild(dateTd);
+                
+                let priceTd = document.createElement('td');
+                priceTd.innerText = stocks[i].toFixed(2);
+                tr.appendChild(priceTd);
+                
+                let diffTd = document.createElement('td');
+                if (i > 0) {
+                    let difference = stocks[i] - stocks[i-1];
+                    diffTd.innerText = difference.toFixed(2);
+                    
+                    if (difference > 0) {
+                        diffTd.className = 'positive';
+                    } else if (difference < 0) {
+                        diffTd.className = 'negative';
+                    }
+                } else {
+                    diffTd.innerText = '-'; 
+                }
+                tr.appendChild(diffTd);
+                
+                table.appendChild(tr);
+            }
+            let sum = 0;
+            let max = stocks[0];
+            let min = stocks[0];
+            let maxDate = date[0];
+            let minDate = date[0];
+            
+            for(let i = 0; i < stocks.length; i++) {
+                sum += stocks[i];
+                
+                if (stocks[i] > max) {
+                    max = stocks[i];
+                    maxDate = date[i];
+                }
+                
+                if (stocks[i] < min) {
+                    min = stocks[i];
+                    minDate = date[i];
+                }
+            }
+            
+            let average = sum / stocks.length;
+            
+            detail.innerHTML = `
+                <div class="stats">
+                    <div>Средняя цена: <b>${average.toFixed(2)}</b> тыс. руб.</div>
+                    <div>Максимальная цена: <b>${max.toFixed(2)}</b> тыс. руб. (${maxDate})</div>
+                    <div>Минимальная цена: <b>${min.toFixed(2)}</b> тыс. руб. (${minDate})</div>
+                </div>
+            `;
+        }
+    </script>
+</head>
+<body>
+    <header onclick="showAuthor()">
+        НГТУ, ФБ, Лабораторная работа 7
+    </header>
+    <main>
+        <button id="buttonOFF" onclick="showStocks()" style="height: 50px; width: 200px; margin: 10px;">
+            Показать котировки
+        </button>
+        <table id="stocks-table"></table>
+        <div id="detail"></div>
+    </main>
+    <footer>
+        &copy; Грудев, ФБИ-32, 2 курс, 2025
+    </footer>
+</body>
+</html>
