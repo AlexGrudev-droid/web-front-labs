@@ -3,10 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>курс валют - O'KEY Group"</title>
+    <title>Курс валют - O'KEY Group</title>
     <link rel="stylesheet" href="../rgz.css">
     <link rel="shortcut icon" href="okey.jpg" type="image/x-icon">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .content {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .exchange-block {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .exchange-block > div {
+            margin: 10px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            min-width: 250px;
+        }
+        .exchange-block input, .exchange-block button {
+            padding: 8px 12px;
+            margin-top: 8px;
+        }
+        #chart {
+            margin: 30px auto;
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -23,24 +54,187 @@
         </h1>
     </header>
 
-    <main>
-        <h2>Курс валют</h2>
-        <div class="currency-converter">
-            <label for="amount">Сумма:</label>
-            <input type="number" id="amount" placeholder="Введите сумму">
-            <select id="currency">
-                <option value="RUB">Рубль (RUB)</option>
-                <option value="AMD">Армянский драм (AMD)</option>
-            </select>
-            <button onclick="convertCurrency()">Конвертировать</button>
-            <div id="result"></div>
+    <div class="content">
+        <h2 id="currencyTitle" style="text-align: center;">Курс армянского драма (AMD)</h2>
+        <div id="rateInfo" style="text-align: center; font-size: 1.2em;">Загрузка курса...</div>
+
+        <!-- Калькулятор валют -->
+        <div class="exchange-block">
+            <div>
+                <h3>Конвертер RUB → AMD</h3>
+                <label>Введите сумму в рублях (₽):</label><br>
+                <input type="number" id="rubInput" step="any" min="0" style="width: 200px;">
+                <button onclick="convertToAmd()">Рассчитать</button>
+                <div id="rubResult" style="margin-top: 15px; font-size: 1.2em;"></div>
+            </div>
+            <div>
+                <h3>Конвертер AMD → RUB</h3>
+                <label>Введите сумму в драмах (AMD):</label><br>
+                <input type="number" id="amdInput" step="any" min="0" style="width: 200px;">
+                <button onclick="convertToRub()">Рассчитать</button>
+                <div id="amdResult" style="margin-top: 15px; font-size: 1.2em;"></div>
+            </div>
         </div>
-    </main>
+
+        <!-- График курса -->
+        <canvas id="chart" style="max-width: 100%; height: 400px; margin: 0 auto;"></canvas>
+        <div id="selectedInfo" style="text-align: center; margin-top: 15px; font-size: 1.1em;"></div>
+    </div>
+
 
     <footer>
         <p>&copy; 2001–2025 O`KEY Group</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        let currentRate = 0;
+        let chartInstance;
+
+        async function fetchCurrentRate() {
+            try {
+                const res = await fetch('https://www.cbr-xml-daily.ru/daily_json.js');
+                const data = await res.json();
+                currentRate = data.Valute.AMD.Value / 100; // Драм в ЦБ РФ указан за 100 единиц
+                document.getElementById('rateInfo').innerText =
+                    `Текущий курс: 1 AMD = ${currentRate.toFixed(6)} RUB`;
+            } catch (error) {
+                document.getElementById('rateInfo').innerText =
+                    "Ошибка загрузки курса. Пожалуйста, попробуйте позже.";
+                console.error("Ошибка при загрузке курса:", error);
+            }
+        }
+
+        function convertToAmd() {
+            const rub = parseFloat(document.getElementById('rubInput').value);
+            if (isNaN(rub) || rub < 0) {
+                document.getElementById('rubResult').innerText = 'Введите положительное число';
+                return;
+            }
+            const out = `${(rub / currentRate).toFixed(2)} AMD`;
+            document.getElementById('rubResult').innerHTML = `<strong>${rub} RUB = ${out}</strong>`;
+        }
+
+        function convertToRub() {
+            const amd = parseFloat(document.getElementById('amdInput').value);
+            if (isNaN(amd) || amd < 0) {
+                document.getElementById('amdResult').innerText = 'Введите положительное число';
+                return;
+            }
+            const out = `${(amd * currentRate).toFixed(4)} RUB`;
+            document.getElementById('amdResult').innerHTML = `<strong>${amd} AMD = ${out}</strong>`;
+        }
+
+        async function drawChart() {
+            const ctx = document.getElementById('chart').getContext('2d');
+            const today = new Date();
+            const days = 30; // Показываем за последний месяц
+            const labels = [];
+            const values = [];
+
+            // Показываем сообщение о загрузке
+            document.getElementById('chart').style.display = 'block';
+            ctx.fillStyle = '#f5f5f5';
+            ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.fillStyle = '#333';
+            ctx.textAlign = 'center';
+            ctx.fillText('Загрузка данных...', ctx.canvas.width/2, ctx.canvas.height/2);
+
+            for (let i = days; i >= 1; i--) {
+                const d = new Date(today);
+                d.setDate(today.getDate() - i);
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                const url = `https://www.cbr-xml-daily.ru/archive/${yyyy}/${mm}/${dd}/daily_json.js`;
+
+                try {
+                    const data = await fetch(url).then(r => r.json());
+                    labels.push(`${dd}.${mm}`);
+                    if (data.Valute && data.Valute.AMD && typeof data.Valute.AMD.Value === 'number') {
+                        values.push(data.Valute.AMD.Value / 100); // Делим на 100, так как курс за 100 драм
+                    } else {
+                        values.push(null);
+                    }
+                } catch {
+                    labels.push(`${dd}.${mm}`);
+                    values.push(null);
+                }
+            }
+
+            if (chartInstance) chartInstance.destroy();
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Курс AMD (₽)',
+                        data: values,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                        pointRadius: 3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { 
+                            display: true, 
+                            text: 'Курс армянского драма за последний месяц',
+                            font: { size: 16 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Курс: ${context.raw.toFixed(6)} ₽`;
+                                }
+                            }
+                        }
+                    },
+                    onClick: (e, elems) => {
+                        if (elems.length) {
+                            const i = elems[0].index;
+                            const val = values[i];
+                            document.getElementById('selectedInfo').innerHTML =
+                                val != null
+                                    ? `<strong>Дата: ${labels[i]}, Курс: ${val.toFixed(6)} ₽</strong>`
+                                    : `<strong>Дата: ${labels[i]}, данные отсутствуют</strong>`;
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: { 
+                                display: true, 
+                                text: 'Рубли (₽)',
+                                font: { weight: 'bold' }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toFixed(4);
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Дата',
+                                font: { weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Инициализация при загрузке страницы
+        window.onload = function() {
+            fetchCurrentRate();
+            drawChart();
+        };
+    </script>
 </body>
 </html>
