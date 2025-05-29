@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Грудев Александр Евгеньевич. Лабораторная 6</title>
+    <link rel="stylesheet" href="../main.css">
+    <link rel="icon" href="../lab3/favicon-32x32.png">
+  <style>
+    #diag {
+      display: flex;
+      align-items: end;
+      background-color: white;
+      width: 100%;
+      height: 520px;
+      padding: 10px;
+      gap: 4px;
+      overflow-x: auto;
+    }
+    .bar {
+      position: relative;
+      width: 30px;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      font-size: 12px;
+    }
+    .bar-back {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: lightblue;
+      opacity: 0.5;
+      z-index: 0;
+      display: flex;
+      color: black;
+    }
+    .bar-front {
+      position: relative;
+      width: 100%;
+      color: black;
+      display: flex;
+      background-color: blue;
+      align-items: top;
+      justify-content: center;
+      z-index: 1;
+    }
+    .bar-front.highlighted {
+      background-color: orange !important;
+    }
+    .bar-back.highlighted {
+        background-color: lightsalmon;
+    }
+    .label {
+      position: absolute;
+      bottom: 100%;
+      margin-bottom: 2px;
+      font-size: 11px;
+      text-align: center;
+      color: black;
+    }
+
+    input[type="number"] {
+      width: 60px;
+    }
+  </style>
+  <script>
+    let barCount = 30;
+    let barsFront = [];
+    let frontData = [];
+    let backData = [];
+    function showDiagram() {
+      const diag = document.getElementById('diag');
+      barsFront = [];
+      frontData = [];
+      backData = [];
+      for (let i = 0; i < barCount; i++) {
+        let frontVal = Math.floor(Math.random() * 11);
+        let backVal = frontVal + Math.floor(Math.random() * 25) + 1;
+        frontData.push(frontVal);
+        backData.push(backVal);
+      }
+      const maxVal = Math.max(...backData);
+      const diagHeight = diag.clientHeight;
+      const k = diagHeight / maxVal * 0.9;
+      for (let i = 0; i < barCount; i++) {
+        let bar = document.createElement('div');
+        bar.className = 'bar';
+        let labelBack = document.createElement('div');
+        labelBack.className = 'label';
+        labelBack.textContent = backData[i];
+        let barBack = document.createElement('div');
+        barBack.className = 'bar-back';
+        barBack.style.height = (backData[i] * k) + 'px';
+        let barFront = document.createElement('div');
+        barFront.className = 'bar-front';
+        barFront.style.height = (frontData[i] * k) + 'px';
+        barFront.textContent = frontData[i];
+        barsFront.push(barFront);
+        bar.appendChild(labelBack);
+        bar.appendChild(barBack);
+        bar.appendChild(barFront);
+        diag.appendChild(bar);
+      }
+    }
+    function highlightBar() {
+      let input = document.getElementById('barNumber');
+      let index = parseInt(input.value) - 1;
+      for (let bar of barsFront) {
+        bar.classList.remove('highlighted');
+      }
+      if (index >= 0 && index < barCount) {
+        barsFront[index].classList.add('highlighted');
+        document.getElementById('minTemp').textContent = frontData[index];
+        document.getElementById('maxTemp').textContent = backData[index];
+      } else {
+        document.getElementById('minTemp').textContent = '-';
+        document.getElementById('maxTemp').textContent = '-';
+      }
+    }
+  </script>
+</head>
+<body onload="showDiagram()">
+  <header onclick="showAuthor()">
+    НГТУ, ФБ, Лабораторная работа 6
+  </header>
+  <main>
+    <div id="diag"></div>
+    <div>
+      <label for="barNumber">Введите номер столбца (1–30): </label>
+      <input type="number" id="barNumber" min="1" max="30" oninput="highlightBar()">
+      <p>Минимальная температура: <span id="minTemp"></span>°C</p>
+      <p>Максимальная температура: <span id="maxTemp"></span>°C</p>
+    </div>
+  </main>
+  <footer>
+    &copy; Грудев Александр, ФБИ-32, 2 курс, 2025
+  </footer>
+</body>
+</html>
