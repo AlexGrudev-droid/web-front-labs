@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Грудев Александр Евгеньевич. Лабораторная 7</title>
+    <link rel="stylesheet" href="../main.css">
+    <link rel="icon" href="../lab3/favicon-32x32.png">
+    <style>
+         #button {
+            right: 1000px;
+            padding: 20px 40px;
+            background-color: #85adf8;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        
+        #euroEx {
+            border: 1px solid black;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            font-family: Arial, sans-serif;
+        }
+        
+    </style>
+    <script>
+        function getEuroExchangeRate() {
+            const url = 'https://www.cbr-xml-daily.ru/daily_json.js'
+            let button = document.getElementById('button');
+            fetch(url)
+             .then(
+                    function(response) {
+                        return response.json();
+                    }
+                )
+            .then(function(json) {
+                const euroToday = json.Valute.EUR.Value;
+                const euroPast = json.Valute.EUR.Previous;
+                const date = new Date(json.Date).toLocaleDateString('ru-RU');
+                const diff = (euroToday - euroPast).toFixed(4);
+                const trend = diff > 0 ? "▲" : diff < 0 ? "▼" : "Нет";
+
+                const infoDiv = document.getElementById('euroEx');
+                infoDiv.innerHTML = `
+                    <h2>Курс евро &euro;</h2>
+                    <p>Дата: ${date}</p>
+                    <p>Текущий курс: ${euroToday.toFixed(4)} ₽</p>
+                    <p>Прошлый курс: ${euroPast.toFixed(4)} ₽</p>
+                    <p>Разница: ${diff} ₽ (${trend})</p>
+                    <a href="https://www.cbr-xml-daily.ru/">Курсы валют, API</a>
+                `;
+            })
+        }
+    </script>
+</head>
+<body>
+    <header onclick="showAuthor()">
+        НГТУ, ФБ, Лабораторная работа 7
+    </header>
+    <main>
+        <button id="button" onclick="getEuroExchangeRate()">Получить курс евро</button>
+        <div id="euroEx"></div>
+    </main>
+    <footer>
+        &copy; Грудев Александр, ФБИ-32, 2 курс, 2025
+    </footer>
+</body>
+</html>
