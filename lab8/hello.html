@@ -31,6 +31,24 @@
                 </li>
             </ul>
             <hr>
+            <h2>Цветы</h2>
+            <table class="table table-info">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Действие</th>
+                    </tr>
+                </thead>
+                <tr v-for="(flower, id) in flowers">
+                    <td>
+                        {{flower}}
+                    </td>
+                    <td>
+                        <button @click="edit(id,flower)">?</button>
+                    </td>
+                </tr>
+            </table>
+            <hr>
             <h2>Калькулятор</h2>
             <input type="number" v-model="a">
             +
