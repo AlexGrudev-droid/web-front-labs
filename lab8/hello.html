@@ -20,9 +20,16 @@
             <button @click="decCounter" v-if="counter>0">--</button>
             <hr>
             <h2>Пользователь:</h2>
-            <div>Имя: {{user.name}}</div>Add commentMore actions
+            <div>Имя: {{user.name}}</div>
             <div>Возраст: {{user.age}}</div>
             <div>Телефон: {{user.tel}}</div>
+            <hr>
+            <h2>Цветы</h2>
+            <ul>
+                <li v-for="flower in flowers">
+                    {{flower}}
+                </li>
+            </ul>
         </div>
     </main>
     <footer>
@@ -39,7 +46,8 @@
                         name: 'Аркадий',
                         age: 'Паровозов',
                         tel: '228-1337-52'
-                    }
+                    },
+                    flowers: ['роза','тюльпан','маргаритка','георгин','одуванчик'],
                 }
             },
             methods: {
