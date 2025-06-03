@@ -6,7 +6,7 @@
     <title>Грудев Александр Евгеньевич. Лабораторная 8</title>
     <link rel="stylesheet" href="../main.css">
     <link rel="icon" href="../lab3/favicon-32x32.png">
-    <link href="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
@@ -14,61 +14,115 @@
     <header onclick="showAuthor()">
         НГТУ, ФБ, Лабораторная работа 8
     </header>
-    <main>
-        <div id="app">
-            <h1 :title="messageRus">{{message}}</h1>
-            <p>Счетчик: {{counter}}</p>
-            <button @click="incCounter" v-if="counter<10">++</button>
-            <button @click="decCounter" v-if="counter>0">--</button>
-            <hr>
-            <h2>Пользователь:</h2>
-            <div>Имя: {{user.name}}</div>
-            <div>Возраст: {{user.age}}</div>
-            <div>Телефон: {{user.tel}}</div>
-            <hr>
-            <h2>Цветы</h2>
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h2 class="card-title">Цветы</h2>
-                    <ul class="list-group">
-                        <li v-for="(flower, id) in flowers" class="list-group-item">
-                            {{flower}} <button @click="edit(id,flower)">?</button>
-                        </li>
-                    </ul>
+
+    <main class="container mt-4" id="app">
+        <h1 :title="messageRus" class="text-center">{{ message }}</h1>
+
+        <p class="text-center">Счетчик: <strong>{{ counter }}</strong></p>
+        <div class="text-center mb-3">
+            <button @click="incCounter" v-if="counter < 10" class="btn btn-success me-2">
+                <i class="bi bi-plus-circle"></i> Увеличить
+            </button>
+            <button @click="decCounter" v-if="counter > 0" class="btn btn-danger">
+                <i class="bi bi-dash-circle"></i> Уменьшить
+            </button>
+        </div>
+
+        <hr>
+
+        <h2>Пользователь:</h2>
+        <ul class="list-group mb-3">
+            <li class="list-group-item">Имя: {{ user.name }}</li>
+            <li class="list-group-item">Возраст: {{ user.age }}</li>
+            <li class="list-group-item">Телефон: {{ user.tel }}</li>
+        </ul>
+
+        <hr>
+
+        <h2>Цветы (Список)</h2>
+        <div class="card mb-4" style="width: 22rem;">
+            <div class="card-body">
+                <h5 class="card-title">Цветы</h5>
+                <ul class="list-group list-group-flush">
+                    <li v-for="(flower, id) in flowers" class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ flower }}</span>
+                        <div>
+                            <button @click="edit(id, flower)" class="btn btn-sm btn-outline-secondary me-1">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                            <button @click="remove(id)" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="input-group mt-3">
+                    <input type="text" v-model="newFlower" class="form-control" placeholder="Новый цветок">
+                    <button @click="addFlower" class="btn btn-outline-success">
+                        <i class="bi bi-plus-lg"></i> Добавить
+                    </button>
                 </div>
             </div>
-            <hr>
-            <h2>Цветы</h2>
-            <table class="table table-info">
-                <thead>
-                    <tr>
-                        <th>Название</th>
-                        <th>Действие</th>
-                    </tr>
-                </thead>
+        </div>
+
+        <h2>Цветы (Таблица)</h2>
+        <table class="table table-bordered table-hover table-info">
+            <thead class="table-primary">
+                <tr>
+                    <th>Название</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
                 <tr v-for="(flower, id) in flowers">
                     <td>
-                        <span v-if="flower===null">Загружается...</span>
-                        <span v-else>{{flower}}</span>
+                        <span v-if="flower === null">Загружается...</span>
+                        <span v-else>{{ flower }}</span>
                     </td>
                     <td>
-                        <button @click="edit(id,flower)" class="btn btn-primary" v-if="flower !== null"><i class='bi bi-pen'></i></button>
-                        <div class="spinner-border" role="status" v-if="flower === null"></div>
+                        <div v-if="flower !== null" class="btn-group btn-group-sm">
+                            <button @click="edit(id, flower)" class="btn btn-primary">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button @click="remove(id)" class="btn btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                        <div class="spinner-border text-primary" role="status" v-else>
+                            <span class="visually-hidden">Загружается...</span>
+                        </div>
                     </td>
                 </tr>
-            </table>
-            <hr>
-            <h2>Калькулятор</h2>
-            <input type="number" v-model="a">
-            +
-            <input type="number" v-model="b">
-            <button @click="sum">=</button>
-            <span>{{result}}</span>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <h2>Калькулятор</h2>
+        <div class="row align-items-center g-2 mb-4">
+            <div class="col-auto">
+                <input type="number" v-model="a" class="form-control" placeholder="Число A">
+            </div>
+            <div class="col-auto fw-bold">+</div>
+            <div class="col-auto">
+                <input type="number" v-model="b" class="form-control" placeholder="Число B">
+            </div>
+            <div class="col-auto">
+                <button @click="sum" class="btn btn-primary">
+                    <i class="bi bi-calculator"></i> Вычислить
+                </button>
+            </div>
+            <div class="col-auto">
+                <span class="badge text-bg-success fs-5">{{ result }}</span>
+            </div>
         </div>
     </main>
+
     <footer>
         &copy; Грудев Александр, ФБИ-32, 2 курс, 2025
     </footer>
+
     <script>
         Vue.createApp({
             data() {
@@ -77,36 +131,53 @@
                     messageRus: 'Привет!',
                     counter: 1,
                     user: {
-                        name: 'Аркадий',
-                        age: 'Паровозов',
+                        name: 'Аркадий Паровозов',
+                        age: '114',
                         tel: '228-1337-52'
                     },
-                    flowers: ['роза','тюльпан','маргаритка','георгин','одуванчик'],
+                    flowers: ['роза', 'тюльпан', 'маргаритка', 'георгин', 'одуванчик'],
+                    newFlower: '',
                     a: 1,
                     b: 10,
                     result: '',
                 }
             },
             methods: {
-                incCounter(){
+                incCounter() {
                     this.counter++;
                 },
-                decCounter(){
+                decCounter() {
                     this.counter--;
                 },
                 edit(id, flower) {
                     let newName = prompt('Введите имя цветка:', flower);
-                    this.flowers[id] = null;
-                    setTimeout(() => {
-                        this.flowers[id]=newName;
-                    },3000);
+                    if (newName !== null && newName.trim() !== '') {
+                        this.flowers[id] = null;
+                        setTimeout(() => {
+                            this.flowers[id] = newName.trim();
+                        }, 3000);
+                    }
+                },
+                remove(id) {
+                    if (confirm('Удалить цветок "' + this.flowers[id] + '"?')) {
+                        this.flowers.splice(id, 1);
+                    }
+                },
+                addFlower() {
+                    if (this.newFlower.trim() !== '') {
+                        this.flowers.push(this.newFlower.trim());
+                        this.newFlower = '';
+                    }
                 },
                 sum() {
-                    this.result = this.a+this.b;
+                    this.result = Number(this.a) + Number(this.b);
                 }
             }
-
         }).mount('#app');
+
+        function showAuthor() {
+            alert("Грудев Александр, ФБИ-32");
+        }
     </script>
 </body>
 </html>
